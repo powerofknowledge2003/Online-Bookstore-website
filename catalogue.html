@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogue</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <h2>Catalogue</h2>
+    <table id="book-table">
+    </table>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const params = new URLSearchParams(window.location.search);
+            const category = params.get('category') || 'CSE'; 
+            fetchBooksByCategory(category);
+        });
+
+        function fetchBooksByCategory(category) {
+            const books = {
+                CSE: [
+                    { title: 'Programming Python', author: 'Mark Lutz', publisher: 'Wiley', price: '$40.5', cover: 'images/cse1.jpg' },
+                    { title: 'Essential Computer Science', author: 'James', publisher: 'OReilly', price: '$45.0', cover: 'images/cse2.jfif' },
+                    { title: 'Cyber Forensics', author: 'Carl', publisher: 'Wiley', price: '$56.5', cover: 'images/cse3.jpg' },
+                    { title: 'Artificial Intelligence', author: 'Churchill', publisher: 'John', price: '$140.5', cover: 'images/cse4.jpg' }
+                ],
+                ECE: [
+                    { title: 'AI Basics', author: 'Russel', publisher: 'Princeton', price: '$63.0', cover: 'images/ece1.jpg' },
+                    { title: 'Embedded Systems', author: 'Smith', publisher: 'Springer', price: '$50.0', cover: 'images/ece2.jfif' },
+                    { title: 'DFG steels', author: 'Spring', publisher: 'Wiley', price: '$70.5', cover: 'images/ece3.jpg' },
+                    { title: 'XML Bible', author: 'Mark', publisher: 'Wiley', price: '$65.55', cover: 'images/ece4.jpg' }
+                ],
+                EEE: [
+                    { title: 'Power Systems', author: 'Brown', publisher: 'Elsevier', price: '$55.0', cover: 'images/eee1.jpg' },
+                    { title: 'ABC Bible', author: 'Winston', publisher: 'Wiley', price: '$40.5', cover: 'images/eee2.jpg' },
+                    { title: 'XML ', author: 'Finn', publisher: 'Wiley', price: '$40.5', cover: 'images/eee3.jpg' },
+                    { title: 'Electric Machines', author: 'Lee', publisher: 'McGraw Hill', price: '$48.0', cover: 'images/eee4.jfif' }
+                ],
+                CIVIL: [
+                    { title: 'Structural Analysis', author: 'Clark', publisher: 'McGraw Hill', price: '$60.0', cover: 'images/civil1.jpg' },
+                    { title: 'XML Bible', author: 'Winston', publisher: 'Wiley', price: '$40.5', cover: 'images/civil2.png' },
+                    { title: 'Drones', author: 'Winston', publisher: 'Wiley', price: '$40.5', cover: 'images/civil3.jpg' },
+                    { title: 'Hydraulics', author: 'Adams', publisher: 'CRC Press', price: '$70.0', cover: 'images/civil4.jpg' }
+                ]
+            };
+
+            const table = document.getElementById('book-table');
+            table.innerHTML = ''; // Clear existing content
+
+            if (books[category]) {
+                books[category].forEach(book => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><img src="${book.cover}" alt="${book.title}" class="book-cover"></td>
+                        <td>${book.title}</td>
+                        <td>${book.author}</td>
+                        <td>${book.publisher}</td>
+                        <td>${book.price}</td>
+                        <td><button onclick="addToCart('${book.title}', '${book.price}')">Add to Cart</button></td>
+                    `;
+                    table.appendChild(row);
+                });
+            } else {
+                table.innerHTML = '<tr><td colspan="6">No books available</td></tr>';
+            }
+        }
+
+        function addToCart(title, price) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.push({ title, price });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert('Book added to cart');
+        }
+    </script>
+</body>
+</html>
